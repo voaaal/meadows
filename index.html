@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title>The conservation and restoration potential of meadow habitats in the Archipelago Sea area</title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/multi-style-layer.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/CasestudyAOI_2.js"></script>
+        <script src="data/Meadow1961Lom_3.js"></script>
+        <script src="data/Meadow1984Lom_4.js"></script>
+        <script src="data/Meadow2022Lom_5.js"></script>
+        <script src="data/Meadowca1800_6.js"></script>
+        <script src="data/Agriculturallandca1800_7.js"></script>
+        <script src="data/AgriculturallandLom19612022_8.js"></script>
+        <script src="data/Conservationareas_9.js"></script>
+        <script src="data/Meadowcontinuumbuffer500m_10.js"></script>
+        <script src="data/Potentialconservablemeadows_11.js"></script>
+        <script src="data/Possiblemeadowcontinuum_12.js"></script>
+        <script src="data/Agriculturallandmodern_13.js"></script>
+        <script src="data/AOI_14.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:10
+        })
+        
+		L.control.scale({
+		metric: true,
+		imperial: false,
+		})
+		.addTo(map);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+        map.createPane('pane_ESRIStandard_0');
+        map.getPane('pane_ESRIStandard_0').style.zIndex = 400;
+        var layer_ESRIStandard_0 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            pane: 'pane_ESRIStandard_0',
+            opacity: 0.8,
+            attribution: '',
+            minZoom: 8,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_ESRIStandard_0;
+        map.addLayer(layer_ESRIStandard_0);
+        map.createPane('pane_GoogleSatellite_1');
+        map.getPane('pane_GoogleSatellite_1').style.zIndex = 401;
+        var layer_GoogleSatellite_1 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleSatellite_1',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 8,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_GoogleSatellite_1;
+        function pop_CasestudyAOI_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Alue</th>\
+                        <td>' + (feature.properties['Alue'] !== null ? autolinker.link(feature.properties['Alue'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CasestudyAOI_2_0() {
+            return {
+                pane: 'pane_CasestudyAOI_2',
+                opacity: 1,
+                color: 'rgba(168,110,225,0.8)',
+                dashArray: '10,5,1,5,1,5',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,182,54,0.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_CasestudyAOI_2');
+        map.getPane('pane_CasestudyAOI_2').style.zIndex = 402;
+        map.getPane('pane_CasestudyAOI_2').style['mix-blend-mode'] = 'normal';
+        var layer_CasestudyAOI_2 = new L.geoJson(json_CasestudyAOI_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CasestudyAOI_2',
+            layerName: 'layer_CasestudyAOI_2',
+            pane: 'pane_CasestudyAOI_2',
+            onEachFeature: pop_CasestudyAOI_2,
+            style: style_CasestudyAOI_2_0,
+        });
+        bounds_group.addLayer(layer_CasestudyAOI_2);
+        map.addLayer(layer_CasestudyAOI_2);
+        function pop_Meadow1961Lom_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Vuosi</th>\
+                        <td>' + (feature.properties['Vuosi'] !== null ? autolinker.link(feature.properties['Vuosi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kohde</th>\
+                        <td>' + (feature.properties['Kohde'] !== null ? autolinker.link(feature.properties['Kohde'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (ha)</th>\
+                        <td>' + (feature.properties['ala_ha'] !== null ? autolinker.link(feature.properties['ala_ha'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (m²)</th>\
+                        <td>' + (feature.properties['ala_m^2'] !== null ? autolinker.link(feature.properties['ala_m^2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Meadow1961Lom_3_0() {
+            return {
+                pane: 'pane_Meadow1961Lom_3',
+                opacity: 1,
+                color: 'rgba(25,45,22,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(21,160,0,0.2980392156862745)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Meadow1961Lom_3');
+        map.getPane('pane_Meadow1961Lom_3').style.zIndex = 403;
+        map.getPane('pane_Meadow1961Lom_3').style['mix-blend-mode'] = 'normal';
+        var layer_Meadow1961Lom_3 = new L.geoJson(json_Meadow1961Lom_3, {
+            attribution: '<a href="www.maanmittauslaitos.fi/asioi-verkossa/vanhat-painetut-kartat">National Land Survey of Finland</a>',
+            interactive: true,
+            dataVar: 'json_Meadow1961Lom_3',
+            layerName: 'layer_Meadow1961Lom_3',
+            pane: 'pane_Meadow1961Lom_3',
+            onEachFeature: pop_Meadow1961Lom_3,
+            style: style_Meadow1961Lom_3_0,
+        });
+        bounds_group.addLayer(layer_Meadow1961Lom_3);
+        function pop_Meadow1984Lom_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Vuosi</th>\
+                        <td>' + (feature.properties['Vuosi'] !== null ? autolinker.link(feature.properties['Vuosi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kohde</th>\
+                        <td>' + (feature.properties['Kohde'] !== null ? autolinker.link(feature.properties['Kohde'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (ha)</th>\
+                        <td>' + (feature.properties['ala_ha'] !== null ? autolinker.link(feature.properties['ala_ha'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (m²)</th>\
+                        <td>' + (feature.properties['ala_m^2'] !== null ? autolinker.link(feature.properties['ala_m^2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Meadow1984Lom_4_0() {
+            return {
+                pane: 'pane_Meadow1984Lom_4',
+                opacity: 1,
+                color: 'rgba(25,45,22,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(21,160,0,0.2980392156862745)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Meadow1984Lom_4');
+        map.getPane('pane_Meadow1984Lom_4').style.zIndex = 404;
+        map.getPane('pane_Meadow1984Lom_4').style['mix-blend-mode'] = 'normal';
+        var layer_Meadow1984Lom_4 = new L.geoJson(json_Meadow1984Lom_4, {
+            attribution: '<a href="www.maanmittauslaitos.fi/asioi-verkossa/vanhat-painetut-kartat">National Land Survey  of Finland</a>',
+            interactive: true,
+            dataVar: 'json_Meadow1984Lom_4',
+            layerName: 'layer_Meadow1984Lom_4',
+            pane: 'pane_Meadow1984Lom_4',
+            onEachFeature: pop_Meadow1984Lom_4,
+            style: style_Meadow1984Lom_4_0,
+        });
+        bounds_group.addLayer(layer_Meadow1984Lom_4);
+        function pop_Meadow2022Lom_5(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Kohde</th>\
+                        <td>' + (feature.properties['Kohde'] !== null ? autolinker.link(feature.properties['Kohde'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (ha)</th>\
+                        <td>' + (feature.properties['ala_ha'] !== null ? autolinker.link(feature.properties['ala_ha'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (m²)</th>\
+                        <td>' + (feature.properties['ala_m^2'] !== null ? autolinker.link(feature.properties['ala_m^2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Vuosi</th>\
+                        <td>' + (feature.properties['Vuosi'] !== null ? autolinker.link(feature.properties['Vuosi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Meadow2022Lom_5_0() {
+            return {
+                pane: 'pane_Meadow2022Lom_5',
+                opacity: 1,
+                color: 'rgba(25,45,22,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(21,160,0,0.2980392156862745)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Meadow2022Lom_5');
+        map.getPane('pane_Meadow2022Lom_5').style.zIndex = 405;
+        map.getPane('pane_Meadow2022Lom_5').style['mix-blend-mode'] = 'normal';
+        var layer_Meadow2022Lom_5 = new L.geoJson(json_Meadow2022Lom_5, {
+            attribution: '<a href="https://www.maanmittauslaitos.fi/kartat-ja-paikkatieto/asiantuntevalle-kayttajalle/tuotekuvaukset/maastotietokanta-0">National Land Survey of Finland</a>',
+            interactive: true,
+            dataVar: 'json_Meadow2022Lom_5',
+            layerName: 'layer_Meadow2022Lom_5',
+            pane: 'pane_Meadow2022Lom_5',
+            onEachFeature: pop_Meadow2022Lom_5,
+            style: style_Meadow2022Lom_5_0,
+        });
+        bounds_group.addLayer(layer_Meadow2022Lom_5);
+        function pop_Meadowca1800_6(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Kohde</th>\
+                        <td>' + (feature.properties['kohde_fi'] !== null ? autolinker.link(feature.properties['kohde_fi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (m²)</th>\
+                        <td>' + (feature.properties['ala_m^2'] !== null ? autolinker.link(feature.properties['ala_m^2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (ha)</th>\
+                        <td>' + (feature.properties['ala_ha'] !== null ? autolinker.link(feature.properties['ala_ha'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Meadowca1800_6_0() {
+            return {
+                pane: 'pane_Meadowca1800_6',
+                opacity: 1,
+                color: 'rgba(88,164,81,0.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(21,160,0,0.2980392156862745)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Meadowca1800_6');
+        map.getPane('pane_Meadowca1800_6').style.zIndex = 406;
+        map.getPane('pane_Meadowca1800_6').style['mix-blend-mode'] = 'normal';
+        var layer_Meadowca1800_6 = new L.geoJson(json_Meadowca1800_6, {
+            attribution: '<a href="https://www.lounaistieto.fi/maisemahistoria/">Lounaistieto</a>',
+            interactive: true,
+            dataVar: 'json_Meadowca1800_6',
+            layerName: 'layer_Meadowca1800_6',
+            pane: 'pane_Meadowca1800_6',
+            onEachFeature: pop_Meadowca1800_6,
+            style: style_Meadowca1800_6_0,
+        });
+        bounds_group.addLayer(layer_Meadowca1800_6);
+        map.addLayer(layer_Meadowca1800_6);
+        function pop_Agriculturallandca1800_7(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Kohde</th>\
+                        <td>' + (feature.properties['kohde_fi'] !== null ? autolinker.link(feature.properties['kohde_fi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (ha)</th>\
+                        <td>' + (feature.properties['ala_ha'] !== null ? autolinker.link(feature.properties['ala_ha'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (m²)</th>\
+                        <td>' + (feature.properties['ala_m^2'] !== null ? autolinker.link(feature.properties['ala_m^2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Agriculturallandca1800_7_0() {
+            return {
+                pane: 'pane_Agriculturallandca1800_7',
+                opacity: 1,
+                color: 'rgba(183,146,101,0.058823529411764705)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,137,7,0.2980392156862745)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Agriculturallandca1800_7');
+        map.getPane('pane_Agriculturallandca1800_7').style.zIndex = 407;
+        map.getPane('pane_Agriculturallandca1800_7').style['mix-blend-mode'] = 'normal';
+        var layer_Agriculturallandca1800_7 = new L.geoJson(json_Agriculturallandca1800_7, {
+            attribution: '<a href="https://www.lounaistieto.fi/maisemahistoria/">Lounaistieto</a>',
+            interactive: true,
+            dataVar: 'json_Agriculturallandca1800_7',
+            layerName: 'layer_Agriculturallandca1800_7',
+            pane: 'pane_Agriculturallandca1800_7',
+            onEachFeature: pop_Agriculturallandca1800_7,
+            style: style_Agriculturallandca1800_7_0,
+        });
+        bounds_group.addLayer(layer_Agriculturallandca1800_7);
+        function pop_AgriculturallandLom19612022_8(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Vuosi</th>\
+                        <td>' + (feature.properties['Vuosi'] !== null ? autolinker.link(feature.properties['Vuosi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kohde</th>\
+                        <td>' + (feature.properties['Kohde'] !== null ? autolinker.link(feature.properties['Kohde'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (ha)</th>\
+                        <td>' + (feature.properties['ala_ha'] !== null ? autolinker.link(feature.properties['ala_ha'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (m²)</th>\
+                        <td>' + (feature.properties['ala_m^2'] !== null ? autolinker.link(feature.properties['ala_m^2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        var pattern_AgriculturallandLom19612022_8_0 = new L.StripePattern({
+            weight: 1.0,
+            spaceWeight: 4.0,
+            color: '#0b0080',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_AgriculturallandLom19612022_8_0.addTo(map);
+        function style_AgriculturallandLom19612022_8_0() {
+            return {
+                pane: 'pane_AgriculturallandLom19612022_8',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_AgriculturallandLom19612022_8_0,
+                interactive: true,
+            }
+        }
+        function style_AgriculturallandLom19612022_8_1() {
+            return {
+                pane: 'pane_AgriculturallandLom19612022_8',
+                opacity: 1,
+                color: 'rgba(11,0,128,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AgriculturallandLom19612022_8');
+        map.getPane('pane_AgriculturallandLom19612022_8').style.zIndex = 408;
+        map.getPane('pane_AgriculturallandLom19612022_8').style['mix-blend-mode'] = 'normal';
+        var layer_AgriculturallandLom19612022_8 = new L.geoJson.multiStyle(json_AgriculturallandLom19612022_8, {
+            attribution: '<a href="https://www.maanmittauslaitos.fi/kartat-ja-paikkatieto/asiantuntevalle-kayttajalle/tuotekuvaukset/maastotietokanta-0">National Land Survey of Finland</a>',
+            interactive: true,
+            dataVar: 'json_AgriculturallandLom19612022_8',
+            layerName: 'layer_AgriculturallandLom19612022_8',
+            pane: 'pane_AgriculturallandLom19612022_8',
+            onEachFeature: pop_AgriculturallandLom19612022_8,
+            styles: [style_AgriculturallandLom19612022_8_0,style_AgriculturallandLom19612022_8_1,]
+        });
+        bounds_group.addLayer(layer_AgriculturallandLom19612022_8);
+        function pop_Conservationareas_9(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['tyyppi'] !== null ? autolinker.link(feature.properties['tyyppi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        var pattern_Conservationareas_9_0 = new L.StripePattern({
+            weight: 1.0,
+            spaceWeight: 4.0,
+            color: '#33a02c',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Conservationareas_9_0.addTo(map);
+        function style_Conservationareas_9_0(feature) {
+            switch(String(feature.properties['tyyppi'])) {
+                case 'Natura':
+                    return {
+                pane: 'pane_Conservationareas_9',
+                opacity: 1,
+                color: 'rgba(51,160,44,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: false,
+            }
+                    break;
+                case 'Valtio':
+                    return {
+                pane: 'pane_Conservationareas_9',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Conservationareas_9_0,
+                interactive: false,
+            }
+                    break;
+                case 'Yksityinen':
+                    return {
+                pane: 'pane_Conservationareas_9',
+                opacity: 1,
+                color: 'rgba(51,160,44,1.0)',
+                dashArray: '10,5',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: false,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Conservationareas_9');
+        map.getPane('pane_Conservationareas_9').style.zIndex = 409;
+        map.getPane('pane_Conservationareas_9').style['mix-blend-mode'] = 'normal';
+        var layer_Conservationareas_9 = new L.geoJson(json_Conservationareas_9, {
+            attribution: '<a href="https://www.syke.fi/fi-FI/Avoin_tieto/Paikkatietoaineistot/Ladattavat_paikkatietoaineistot">Finnish Environment Institute</a>',
+            interactive: false,
+            dataVar: 'json_Conservationareas_9',
+            layerName: 'layer_Conservationareas_9',
+            pane: 'pane_Conservationareas_9',
+            onEachFeature: pop_Conservationareas_9,
+            style: style_Conservationareas_9_0,
+        });
+        bounds_group.addLayer(layer_Conservationareas_9);
+        map.addLayer(layer_Conservationareas_9);
+        function pop_Meadowcontinuumbuffer500m_10(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['DN'] !== null ? autolinker.link(feature.properties['DN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['layer'] !== null ? autolinker.link(feature.properties['layer'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COPYRIGHT'] !== null ? autolinker.link(feature.properties['COPYRIGHT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['objekt_swe'] !== null ? autolinker.link(feature.properties['objekt_swe'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['kohde_fi'] !== null ? autolinker.link(feature.properties['kohde_fi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ala_m^2'] !== null ? autolinker.link(feature.properties['ala_m^2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['area_m^2'] !== null ? autolinker.link(feature.properties['area_m^2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ala_ha'] !== null ? autolinker.link(feature.properties['ala_ha'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['area_ha'] !== null ? autolinker.link(feature.properties['area_ha'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['path'] !== null ? autolinker.link(feature.properties['path'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Meadowcontinuumbuffer500m_10_0() {
+            return {
+                pane: 'pane_Meadowcontinuumbuffer500m_10',
+                opacity: 1,
+                color: 'rgba(135,76,229,0.2980392156862745)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(168,110,225,0.2980392156862745)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Meadowcontinuumbuffer500m_10');
+        map.getPane('pane_Meadowcontinuumbuffer500m_10').style.zIndex = 410;
+        map.getPane('pane_Meadowcontinuumbuffer500m_10').style['mix-blend-mode'] = 'normal';
+        var layer_Meadowcontinuumbuffer500m_10 = new L.geoJson(json_Meadowcontinuumbuffer500m_10, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Meadowcontinuumbuffer500m_10',
+            layerName: 'layer_Meadowcontinuumbuffer500m_10',
+            pane: 'pane_Meadowcontinuumbuffer500m_10',
+            onEachFeature: pop_Meadowcontinuumbuffer500m_10,
+            style: style_Meadowcontinuumbuffer500m_10_0,
+        });
+        bounds_group.addLayer(layer_Meadowcontinuumbuffer500m_10);
+        function pop_Potentialconservablemeadows_11(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Kohde</th>\
+                        <td>' + (feature.properties['kohde_fi'] !== null ? autolinker.link(feature.properties['kohde_fi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (m²)</th>\
+                        <td>' + (feature.properties['ala_m^2'] !== null ? autolinker.link(feature.properties['ala_m^2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (ha)</th>\
+                        <td>' + (feature.properties['ala_ha'] !== null ? autolinker.link(feature.properties['ala_ha'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Vuosi</th>\
+                        <td>' + (feature.properties['vuosi'] !== null ? autolinker.link(feature.properties['vuosi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Potentialconservablemeadows_11_0() {
+            return {
+                pane: 'pane_Potentialconservablemeadows_11',
+                opacity: 1,
+                color: 'rgba(98,10,240,0.2980392156862745)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,55,255,0.4627450980392157)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Potentialconservablemeadows_11');
+        map.getPane('pane_Potentialconservablemeadows_11').style.zIndex = 411;
+        map.getPane('pane_Potentialconservablemeadows_11').style['mix-blend-mode'] = 'normal';
+        var layer_Potentialconservablemeadows_11 = new L.geoJson(json_Potentialconservablemeadows_11, {
+            attribution: '<a href="https://www.lounaistieto.fi/maisemahistoria/">Lounaistieto</a>',
+            interactive: true,
+            dataVar: 'json_Potentialconservablemeadows_11',
+            layerName: 'layer_Potentialconservablemeadows_11',
+            pane: 'pane_Potentialconservablemeadows_11',
+            onEachFeature: pop_Potentialconservablemeadows_11,
+            style: style_Potentialconservablemeadows_11_0,
+        });
+        bounds_group.addLayer(layer_Potentialconservablemeadows_11);
+        function pop_Possiblemeadowcontinuum_12(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Kohde</th>\
+                        <td>' + (feature.properties['kohde_fi'] !== null ? autolinker.link(feature.properties['kohde_fi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (m²)</th>\
+                        <td>' + (feature.properties['ala_m^2'] !== null ? autolinker.link(feature.properties['ala_m^2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ala (ha)</th>\
+                        <td>' + (feature.properties['ala_ha'] !== null ? autolinker.link(feature.properties['ala_ha'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        var pattern_Possiblemeadowcontinuum_12_0 = new L.StripePattern({
+            weight: 1.0,
+            spaceWeight: 11.0,
+            color: '#885dcf',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Possiblemeadowcontinuum_12_0.addTo(map);
+        function style_Possiblemeadowcontinuum_12_0() {
+            return {
+                pane: 'pane_Possiblemeadowcontinuum_12',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Possiblemeadowcontinuum_12_0,
+                interactive: true,
+            }
+        }
+        function style_Possiblemeadowcontinuum_12_1() {
+            return {
+                pane: 'pane_Possiblemeadowcontinuum_12',
+                opacity: 1,
+                color: 'rgba(135,76,229,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Possiblemeadowcontinuum_12');
+        map.getPane('pane_Possiblemeadowcontinuum_12').style.zIndex = 412;
+        map.getPane('pane_Possiblemeadowcontinuum_12').style['mix-blend-mode'] = 'normal';
+        var layer_Possiblemeadowcontinuum_12 = new L.geoJson.multiStyle(json_Possiblemeadowcontinuum_12, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Possiblemeadowcontinuum_12',
+            layerName: 'layer_Possiblemeadowcontinuum_12',
+            pane: 'pane_Possiblemeadowcontinuum_12',
+            onEachFeature: pop_Possiblemeadowcontinuum_12,
+            styles: [style_Possiblemeadowcontinuum_12_0,style_Possiblemeadowcontinuum_12_1,]
+        });
+        bounds_group.addLayer(layer_Possiblemeadowcontinuum_12);
+        function pop_Agriculturallandmodern_13(feature, layer) {
+        }
+
+        var pattern_Agriculturallandmodern_13_0 = new L.StripePattern({
+            weight: 1.0,
+            spaceWeight: 4.0,
+            color: '#000000',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Agriculturallandmodern_13_0.addTo(map);
+        function style_Agriculturallandmodern_13_0() {
+            return {
+                pane: 'pane_Agriculturallandmodern_13',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Agriculturallandmodern_13_0,
+                interactive: true,
+            }
+        }
+        function style_Agriculturallandmodern_13_1() {
+            return {
+                pane: 'pane_Agriculturallandmodern_13',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Agriculturallandmodern_13');
+        map.getPane('pane_Agriculturallandmodern_13').style.zIndex = 413;
+        map.getPane('pane_Agriculturallandmodern_13').style['mix-blend-mode'] = 'normal';
+        var layer_Agriculturallandmodern_13 = new L.geoJson.multiStyle(json_Agriculturallandmodern_13, {
+            attribution: '<a href="https://www.maanmittauslaitos.fi/kartat-ja-paikkatieto/asiantuntevalle-kayttajalle/tuotekuvaukset/maastotietokanta-0">National Land Survey of Finland</a>',
+            interactive: true,
+            dataVar: 'json_Agriculturallandmodern_13',
+            layerName: 'layer_Agriculturallandmodern_13',
+            pane: 'pane_Agriculturallandmodern_13',
+            onEachFeature: pop_Agriculturallandmodern_13,
+            styles: [style_Agriculturallandmodern_13_0,style_Agriculturallandmodern_13_1,]
+        });
+        bounds_group.addLayer(layer_Agriculturallandmodern_13);
+        function pop_AOI_14(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['layer'] !== null ? autolinker.link(feature.properties['layer'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AOI_14_0() {
+            return {
+                pane: 'pane_AOI_14',
+                opacity: 1,
+                color: 'rgba(168,110,225,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,182,54,0.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_AOI_14');
+        map.getPane('pane_AOI_14').style.zIndex = 414;
+        map.getPane('pane_AOI_14').style['mix-blend-mode'] = 'normal';
+        var layer_AOI_14 = new L.geoJson(json_AOI_14, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_AOI_14',
+            layerName: 'layer_AOI_14',
+            pane: 'pane_AOI_14',
+            onEachFeature: pop_AOI_14,
+            style: style_AOI_14_0,
+        });
+        bounds_group.addLayer(layer_AOI_14);
+        map.addLayer(layer_AOI_14);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>The conservation and restoration potential of meadow habitats in the Archipelago Sea area</h2>';
+            };
+            title.addTo(map);
+            var abstract = new L.Control({'position':'bottomleft'});
+            abstract.onAdd = function (map) {
+                this._div = L.DomUtil.create('div',
+                'leaflet-control abstract');
+                this._div.id = 'abstract'
+                    this._div.setAttribute("onmouseenter", "abstract.show()");
+                    this._div.setAttribute("onmouseleave", "abstract.hide()");
+                    this.hide();
+                    return this._div;
+                };
+                abstract.hide = function () {
+                    this._div.classList.remove("abstractUncollapsed");
+                    this._div.classList.add("abstract");
+                    this._div.innerHTML = 'i'
+                }
+                abstract.show = function () {
+                    this._div.classList.remove("abstract");
+                    this._div.classList.add("abstractUncollapsed");
+                    this._div.innerHTML = 'In the Archipelago Sea in Southwestern Finland the changing and disappearing meadows can be seen in time. In this map has been visualized the changing meadow and agriculture landscape in time and covered area from the 17th century to current day. This map shows clearly how the meadows have gotten smaller and some have even disappeared. <br /><br /><br />Data Citation: Meadows and agricultural land from the National Land survey of Finland, available at https://paituli.csc.fi/metadata.html. History of landscapes in Southwestern Finland, available at https://data.lounaistieto.fi/data/en_GB/dataset/maisemahistoria. Older basemaps from National Land Survey of Finland. Older basemaps were used to digitize meadows. Older basemaps available at https://www.maanmittauslaitos.fi/asioi-verkossa/vanhat-painetut-kartat. Nature conservation areas (Natura 2000 areas, areas on national and private land) from Finnish Environment Institute, available in https://www.syke.fi/fi-FI/Avoin_tieto/Paikkatietoaineistot/Ladattavat_paikkatietoaineistot.<br /><br />';
+            };
+            abstract.addTo(map);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/AOI_14.png" /> AOI': layer_AOI_14,'<img src="legend/Agriculturallandmodern_13.png" /> Agricultural land (modern)': layer_Agriculturallandmodern_13,'<img src="legend/Possiblemeadowcontinuum_12.png" /> Possible meadow continuum': layer_Possiblemeadowcontinuum_12,'<img src="legend/Potentialconservablemeadows_11.png" /> Potential conservable meadows': layer_Potentialconservablemeadows_11,'<img src="legend/Meadowcontinuumbuffer500m_10.png" /> Meadow continuum buffer 500m': layer_Meadowcontinuumbuffer500m_10,'Conservation areas<br /><table><tr><td style="text-align: center;"><img src="legend/Conservationareas_9_Natura0.png" /></td><td>Natura</td></tr><tr><td style="text-align: center;"><img src="legend/Conservationareas_9_National1.png" /></td><td>National</td></tr><tr><td style="text-align: center;"><img src="legend/Conservationareas_9_Private2.png" /></td><td>Private</td></tr></table>': layer_Conservationareas_9,'<img src="legend/AgriculturallandLom19612022_8.png" /> Agricultural land Lom 1961-2022': layer_AgriculturallandLom19612022_8,'<img src="legend/Agriculturallandca1800_7.png" /> Agricultural land ca1800': layer_Agriculturallandca1800_7,'<img src="legend/Meadowca1800_6.png" /> Meadow ca1800': layer_Meadowca1800_6,'<img src="legend/Meadow2022Lom_5.png" /> Meadow 2022 Lom': layer_Meadow2022Lom_5,'<img src="legend/Meadow1984Lom_4.png" /> Meadow 1984 Lom': layer_Meadow1984Lom_4,'<img src="legend/Meadow1961Lom_3.png" /> Meadow 1961 Lom': layer_Meadow1961Lom_3,'<img src="legend/CasestudyAOI_2.png" /> Case study AOI': layer_CasestudyAOI_2,"Google Satellite": layer_GoogleSatellite_1,"ESRI Standard": layer_ESRIStandard_0,}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
